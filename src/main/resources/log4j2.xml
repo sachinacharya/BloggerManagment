@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<Configuration monitorInterval="60">
+	<Properties>
+		<Property name="log-path">/applogs/${hostName}/blog-management</Property>
+	</Properties>
+	<Appenders>
+		<Console name="Console-Appender" target="SYSTEM_OUT">
+			<PatternLayout>
+				<pattern>
+					%d{dd-MM-yyyy HH:mm:ss} %-5p - %tid - %m%n
+				</pattern>
+			</PatternLayout>
+		</Console>
+		<RollingFile name="RollingFile"
+			fileName="${log-path}/blog-management.log"
+			filePattern="${log-path}/blog-management_%d{ddMMyy-HH-a}.log">
+			<PatternLayout>
+				<Pattern>%d{dd-MM-yyyy HH:mm:ss} %-5p - %tid - %m%n</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1"
+					modulate="true" />
+			</Policies>
+			<DefaultRolloverStrategy max="200" />
+		</RollingFile>
+		<File name="SpringBoot-File-Appender"
+			fileName="${log-path}/springboot_log.log">
+			<PatternLayout>
+				<Pattern>%d{dd-MM-yyyy HH:mm:ss} %-5p - %tid - %m%n</Pattern>
+			</PatternLayout>
+		</File>
+	</Appenders>
+	<Loggers>
+		<Logger name="org.springframework" level="error"
+			additivity="false">
+			<AppenderRef ref="SpringBoot-File-Appender" />
+			<AppenderRef ref="Console-Appender" />
+		</Logger>
+		<Logger name="com.sbi" level="debug" additivity="false">
+			<AppenderRef ref="RollingFile" />
+			<AppenderRef ref="Console-Appender" />
+		</Logger>
+		<Root>
+			<AppenderRef ref="Console-Appender" />
+		</Root>
+	</Loggers>
+</Configuration>
